@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propriétés - Côte d'Azur Immobilier</title>
+    <style>
+        /* Animations */
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes wave {
+            0% { transform: translateX(0) translateZ(0) scaleY(1); }
+            50% { transform: translateX(-25%) translateZ(0) scaleY(0.8); }
+            100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+        }
+
+        /* Base styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            background-color: #f8f9fa;
+            scroll-behavior: smooth;
+        }
+        
+        /* Header and Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: transparent;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .main-nav {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: #000;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            padding: 5px 10px;
+        }
+        
+        .nav-link:hover {
+            opacity: 0.7;
+        }
+        
+        .nav-link.active {
+            font-weight: bold;
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh; /* Hauteur de l'écran de visualisation */
+            min-height: 600px; /* Hauteur minimale pour les petits écrans */
+            width: 100%;
+            background-image: url('images/u9534644866_A_breathtaking_luxury_villa_on_the_French_Riviera_2e247d9c-3d90-4acb-a99a-b2809af0ff5b_0.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Effet parallaxe pour un meilleur rendu */
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            margin-top: 0; /* Suppression de la marge supérieure */
+            padding-top: 60px; /* Compensé par un padding pour la navigation */
+            overflow: hidden;
+            box-sizing: border-box; /* S'assurer que padding est inclus dans la hauteur */
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 102, 161, 0.1), rgba(0, 0, 0, 0.3));
+            z-index: 1;
+        }
+        
+        .property-highlight {
+            position: relative;
+            max-width: 500px;
+            margin: 0 50px 50px 0;
+            padding: 25px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+            z-index: 3;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .highlight-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .highlight-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .highlight-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #0066a1;
+            margin-bottom: 20px;
+        }
+        
+        .highlight-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e63946;
+            margin-bottom: 20px;
+        }
+        
+        .highlight-desc {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .highlight-features {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #e6f3fa;
+            padding: 10px 15px;
+            border-radius: 20px;
+        }
+        
+        .feature i {
+            color: #0066a1;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #0066a1;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #004c7a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Property Grid */
+        .properties {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #0066a1;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: #0066a1;
+        }
+        
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        @media (max-width: 1200px) {
+            .property-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .property-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .property-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .property-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-image {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%; /* Makes it square */
+            overflow: hidden;
+        }
+        
+        .card-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .property-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+        
+        .property-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #e63946;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1;
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #0066a1;
+        }
+        
+        .card-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .card-location i {
+            color: #0066a1;
+        }
+        
+        .card-price {
+            font-weight: bold;
+            color: #e63946;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .card-features {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        
+        .card-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .card-feature i {
+            color: #0066a1;
+            margin-bottom: 5px;
+        }
+        
+        /* Floating icons (marine elements) */
+        .floating-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .float-icon {
+            position: absolute;
+            animation: float 5s ease-in-out infinite;
+            opacity: 0.2;
+            color: #0066a1;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #003459;
+            color: white;
+            padding: 70px 0 20px;
+            position: relative;
+            margin-top: 100px;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, #0066a1, #00a1d9, #0066a1);
+        }
+        
+        .footer-waves {
+            position: absolute;
+            top: -70px;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-image: url('data:image/svg+xml,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18.17,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="%23003459"></path></svg>');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            padding: 0 20px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #fff;
+            font-weight: bold;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #00a1d9;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .footer-links li:hover {
+            transform: translateX(5px);
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .footer-links a:hover {
+            color: #00a1d9;
+        }
+        
+        .footer-links i {
+            margin-right: 10px;
+            color: #00a1d9;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: #fff;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: #00a1d9;
+            transform: translateY(-5px);
+        }
+        
+        .footer-contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .footer-contact-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: #00a1d9;
+        }
+        
+        .footer-newsletter {
+            margin-top: 20px;
+        }
+        
+        .footer-newsletter p {
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .newsletter-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 30px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            outline: none;
+        }
+        
+        .newsletter-input::placeholder {
+            color: #ccc;
+        }
+        
+        .newsletter-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            background-color: #00a1d9;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .newsletter-btn:hover {
+            background-color: #0066a1;
+        }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 50px auto 0;
+            padding: 20px 20px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .footer-bottom p {
+            margin: 10px 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .highlight-content {
+                flex-direction: column;
+            }
+            
+            .property-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+                padding-left: 20px;
+                padding-right: 20px;
+                flex-wrap: wrap;
+            }
+            
+            .property-highlight {
+                margin: 30px 20px;
+                max-width: 90%;
+                align-self: center;
+            }
+            
+            .hero {
+                height: 100vh; /* Garde la hauteur à 100vh */
+                min-height: 600px;
+                padding-top: 90px; /* Plus d'espace en haut pour la navigation */
+                align-items: center; /* Centre le contenu sur les petits écrans */
+                justify-content: center; /* Centre le contenu sur les petits écrans */
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header class="header">
+        <div class="header-content">
+            <div class="title">Côte d'Azur Immobilier</div>
+            <nav class="main-nav">
+                <a href="properties.html" class="nav-link active">Propriétés</a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section with Property Highlight -->
+    <section class="hero">
+        <div class="property-highlight">
+            <div class="highlight-content">
+                <div class="highlight-info">
+                    <h1 class="highlight-title">Villa Azur Éternel</h1>
+                    <div class="highlight-price">Prix: 4 950 000 €</div>
+                    <p class="highlight-desc">Une villa exceptionnelle avec vue panoramique sur la Méditerranée. Située dans un domaine privé et sécurisé.</p>
+                    
+                    <div class="highlight-features">
+                        <div class="feature">
+                            <i class="fas fa-expand"></i>
+                            <span>450 m²</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-bed"></i>
+                            <span>5 ch.</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-bath"></i>
+                            <span>4 sdb</span>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="btn">Voir les détails</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Property Grid Section -->
+    <section class="properties">
+        <h2 class="section-title">Nos Propriétés</h2>
+        
+        <div class="property-grid">
+            <!-- Property Card 1 -->
+            <div class="property-card">
+                <div class="card-image">
+                    <div class="property-tag">À Vendre</div>
+                    <img src="images/u9534644866_A_breathtaking_luxury_villa_on_the_French_Riviera_2e247d9c-3d90-4acb-a99a-b2809af0ff5b_0.png" alt="Villa à Saint-Tropez">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Villa Contemporaine</h3>
+                    <div class="card-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Saint-Tropez</span>
+                    </div>
+                    <div class="card-price">3 750 000 €</div>
+                    <div class="card-features">
+                        <div class="card-feature">
+                            <i class="fas fa-expand"></i>
+                            <span>320 m²</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bed"></i>
+                            <span>4</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bath"></i>
+                            <span>3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Property Card 2 -->
+            <div class="property-card">
+                <div class="card-image">
+                    <div class="property-tag">À Vendre</div>
+                    <img src="images/u9534644866_A_breathtaking_luxury_villa_on_the_French_Riviera_2e247d9c-3d90-4acb-a99a-b2809af0ff5b_1.png" alt="Appartement à Cannes">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Appartement de Luxe</h3>
+                    <div class="card-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Cannes</span>
+                    </div>
+                    <div class="card-price">1 890 000 €</div>
+                    <div class="card-features">
+                        <div class="card-feature">
+                            <i class="fas fa-expand"></i>
+                            <span>180 m²</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bed"></i>
+                            <span>3</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bath"></i>
+                            <span>2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Property Card 3 -->
+            <div class="property-card">
+                <div class="card-image">
+                    <div class="property-tag">À Vendre</div>
+                    <img src="images/u9534644866_A_high-end_apartment_on_the_French_Riviera_featur_593b0df5-0f8a-4e1f-8be5-a0302385d56f_0.png" alt="Villa à Antibes">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Villa Vue Mer</h3>
+                    <div class="card-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Antibes</span>
+                    </div>
+                    <div class="card-price">4 200 000 €</div>
+                    <div class="card-features">
+                        <div class="card-feature">
+                            <i class="fas fa-expand"></i>
+                            <span>380 m²</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bed"></i>
+                            <span>5</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bath"></i>
+                            <span>4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Property Card 4 -->
+            <div class="property-card">
+                <div class="card-image">
+                    <div class="property-tag">À Vendre</div>
+                    <img src="images/u9534644866_A_high-end_apartment_on_the_French_Riviera_featur_593b0df5-0f8a-4e1f-8be5-a0302385d56f_1.png" alt="Appartement à Nice">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Penthouse Promenade</h3>
+                    <div class="card-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Nice</span>
+                    </div>
+                    <div class="card-price">2 350 000 €</div>
+                    <div class="card-features">
+                        <div class="card-feature">
+                            <i class="fas fa-expand"></i>
+                            <span>210 m²</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bed"></i>
+                            <span>3</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bath"></i>
+                            <span>2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Property Card 5 -->
+            <div class="property-card">
+                <div class="card-image">
+                    <div class="property-tag">À Vendre</div>
+                    <img src="images/u9534644866_A_high-end_apartment_on_the_French_Riviera_featur_593b0df5-0f8a-4e1f-8be5-a0302385d56f_2.png" alt="Villa à Èze">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Villa Panoramique</h3>
+                    <div class="card-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Èze</span>
+                    </div>
+                    <div class="card-price">5 100 000 €</div>
+                    <div class="card-features">
+                        <div class="card-feature">
+                            <i class="fas fa-expand"></i>
+                            <span>420 m²</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bed"></i>
+                            <span>6</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bath"></i>
+                            <span>5</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Property Card 6 -->
+            <div class="property-card">
+                <div class="card-image">
+                    <div class="property-tag">À Vendre</div>
+                    <img src="images/u9534644866_A_high-end_apartment_on_the_French_Riviera_featur_593b0df5-0f8a-4e1f-8be5-a0302385d56f_3.png" alt="Appartement à Monaco">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Appartement Luxueux</h3>
+                    <div class="card-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Monaco</span>
+                    </div>
+                    <div class="card-price">8 750 000 €</div>
+                    <div class="card-features">
+                        <div class="card-feature">
+                            <i class="fas fa-expand"></i>
+                            <span>240 m²</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bed"></i>
+                            <span>3</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bath"></i>
+                            <span>3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Property Card 7 -->
+            <div class="property-card">
+                <div class="card-image">
+                    <div class="property-tag">À Vendre</div>
+                    <img src="images/u9534644866_A_high-end_apartment_on_the_French_Riviera_featur_bb8c7a1a-793a-40e4-a268-8248430b6af5_0.png" alt="Villa à Saint-Jean-Cap-Ferrat">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Villa d'Exception</h3>
+                    <div class="card-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Saint-Jean-Cap-Ferrat</span>
+                    </div>
+                    <div class="card-price">12 500 000 €</div>
+                    <div class="card-features">
+                        <div class="card-feature">
+                            <i class="fas fa-expand"></i>
+                            <span>550 m²</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bed"></i>
+                            <span>7</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bath"></i>
+                            <span>6</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Property Card 8 -->
+            <div class="property-card">
+                <div class="card-image">
+                    <div class="property-tag">À Vendre</div>
+                    <img src="images/u9534644866_A_high-end_apartment_on_the_French_Riviera_featur_bb8c7a1a-793a-40e4-a268-8248430b6af5_1.png" alt="Appartement à Menton">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Appartement Belle Époque</h3>
+                    <div class="card-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Menton</span>
+                    </div>
+                    <div class="card-price">1 650 000 €</div>
+                    <div class="card-features">
+                        <div class="card-feature">
+                            <i class="fas fa-expand"></i>
+                            <span>160 m²</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bed"></i>
+                            <span>3</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bath"></i>
+                            <span>2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Property Card 9 -->
+            <div class="property-card">
+                <div class="card-image">
+                    <div class="property-tag">À Vendre</div>
+                    <img src="images/u9534644866_A_high-end_apartment_on_the_French_Riviera_featur_bb8c7a1a-793a-40e4-a268-8248430b6af5_2.png" alt="Villa à Théoule-sur-Mer">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Villa Méditerranéenne</h3>
+                    <div class="card-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Théoule-sur-Mer</span>
+                    </div>
+                    <div class="card-price">3 450 000 €</div>
+                    <div class="card-features">
+                        <div class="card-feature">
+                            <i class="fas fa-expand"></i>
+                            <span>290 m²</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bed"></i>
+                            <span>4</span>
+                        </div>
+                        <div class="card-feature">
+                            <i class="fas fa-bath"></i>
+                            <span>3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+                <!-- Property Card 10 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <div class="property-tag">À Vendre</div>
+                        <img src="images/u9534644866_A_high-end_apartment_on_the_French_Riviera_featur_bb8c7a1a-793a-40e4-a268-8248430b6af5_3.png" alt="Appartement à Villefranche-sur-Mer">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Appartement Front de Mer</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Villefranche-sur-Mer</span>
+                        </div>
+                        <div class="card-price">2 850 000 €</div>
+                        <div class="card-features">
+                            <div class="card-feature">
+                                <i class="fas fa-expand"></i>
+                                <span>195 m²</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bed"></i>
+                                <span>3</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bath"></i>
+                                <span>2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 11 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <div class="property-tag">À Vendre</div>
+                        <img src="images/u9534644866_A_magnificent_Mediterranean_villa_on_the_French_R_51b2efa6-0b55-4ed8-a34a-3af0e1f20095_0.png" alt="Villa à Mougins">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Villa Provençale</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Mougins</span>
+                        </div>
+                        <div class="card-price">2 950 000 €</div>
+                        <div class="card-features">
+                            <div class="card-feature">
+                                <i class="fas fa-expand"></i>
+                                <span>280 m²</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bed"></i>
+                                <span>4</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bath"></i>
+                                <span>3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 12 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <div class="property-tag">À Vendre</div>
+                        <img src="images/u9534644866_A_magnificent_Mediterranean_villa_on_the_French_R_51b2efa6-0b55-4ed8-a34a-3af0e1f20095_1.png" alt="Appartement à Cap d'Antibes">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Appartement de Prestige</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Cap d'Antibes</span>
+                        </div>
+                        <div class="card-price">3 200 000 €</div>
+                        <div class="card-features">
+                            <div class="card-feature">
+                                <i class="fas fa-expand"></i>
+                                <span>220 m²</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bed"></i>
+                                <span>3</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bath"></i>
+                                <span>3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 13 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <div class="property-tag">À Vendre</div>
+                        <img src="images/u9534644866_A_magnificent_Mediterranean_villa_on_the_French_R_51b2efa6-0b55-4ed8-a34a-3af0e1f20095_2.png" alt="Villa à Saint-Paul-de-Vence">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Villa d'Artiste</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Saint-Paul-de-Vence</span>
+                        </div>
+                        <div class="card-price">2 790 000 €</div>
+                        <div class="card-features">
+                            <div class="card-feature">
+                                <i class="fas fa-expand"></i>
+                                <span>260 m²</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bed"></i>
+                                <span>4</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bath"></i>
+                                <span>3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 14 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <div class="property-tag">À Vendre</div>
+                        <img src="images/u9534644866_A_magnificent_Mediterranean_villa_on_the_French_R_51b2efa6-0b55-4ed8-a34a-3af0e1f20095_3.png" alt="Appartement à Juan-les-Pins">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Appartement Art Déco</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Juan-les-Pins</span>
+                        </div>
+                        <div class="card-price">1 480 000 €</div>
+                        <div class="card-features">
+                            <div class="card-feature">
+                                <i class="fas fa-expand"></i>
+                                <span>140 m²</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bed"></i>
+                                <span>2</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bath"></i>
+                                <span>2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 15 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <div class="property-tag">À Vendre</div>
+                        <img src="images/u9534644866_A_stunning_modern_villa_on_the_French_Riviera_per_7e68a200-eaaf-4e1f-bd15-085b9f2268a9_0.png" alt="Villa à Roquebrune-Cap-Martin">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Villa Contemporaine</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Roquebrune-Cap-Martin</span>
+                        </div>
+                        <div class="card-price">4 850 000 €</div>
+                        <div class="card-features">
+                            <div class="card-feature">
+                                <i class="fas fa-expand"></i>
+                                <span>370 m²</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bed"></i>
+                                <span>5</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bath"></i>
+                                <span>4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 16 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <div class="property-tag">À Vendre</div>
+                        <img src="images/u9534644866_A_stunning_modern_villa_on_the_French_Riviera_per_7e68a200-eaaf-4e1f-bd15-085b9f2268a9_1.png" alt="Appartement à Beaulieu-sur-Mer">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Appartement Classique</h3>
+                        <div class="card-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Beaulieu-sur-Mer</span>
+                        </div>
+                        <div class="card-price">1 920 000 €</div>
+                        <div class="card-features">
+                            <div class="card-feature">
+                                <i class="fas fa-expand"></i>
+                                <span>175 m²</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bed"></i>
+                                <span>3</span>
+                            </div>
+                            <div class="card-feature">
+                                <i class="fas fa-bath"></i>
+                                <span>2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Floating marine icons -->
+        <div class="floating-icons">
+            <i class="fas fa-anchor float-icon" style="top: 25%; left: 10%; font-size: 24px;"></i>
+            <i class="fas fa-ship float-icon" style="top: 15%; left: 80%; font-size: 30px; animation-delay: 1s;"></i>
+            <i class="fas fa-water float-icon" style="top: 70%; left: 20%; font-size: 28px; animation-delay: 2s;"></i>
+            <i class="fas fa-fish float-icon" style="top: 40%; left: 90%; font-size: 22px; animation-delay: 3s;"></i>
+            <i class="fas fa-umbrella-beach float-icon" style="top: 85%; left: 5%; font-size: 26px; animation-delay: 1.5s;"></i>
+            <i class="fas fa-sun float-icon" style="top: 10%; left: 40%; font-size: 32px; animation-delay: 2.5s;"></i>
+        </div>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-waves"></div>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3 class="footer-title">Côte d'Azur Immobilier</h3>
+                    <p>Votre partenaire de confiance pour l'achat et la vente de propriétés d'exception sur la Côte d'Azur.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-title">Liens Rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Accueil</a></li>
+                        <li><a href="proprietes.html"><i class="fas fa-chevron-right"></i> Propriétés</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Services</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> À Propos</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-title">Destinations</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Saint-Tropez</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Cannes</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Nice</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Monaco</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Antibes</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-title">Contact</h3>
+                    <div class="footer-contact-info">
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <span>123 Boulevard de la Croisette, Cannes</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <span>+33 4 93 XX XX XX</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <span>contact@cotedazur.cz</span>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-newsletter">
+                        <p>Inscrivez-vous à notre newsletter pour recevoir nos dernières offres</p>
+                        <form class="newsletter-form">
+                            <input type="email" class="newsletter-input" placeholder="Votre adresse email" aria-label="Adresse email">
+                            <button type="submit" class="newsletter-btn"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Côte d'Azur Immobilier. Tous droits réservés.</p>
+            </div>
+        </footer>
+    </body>
+    </html>   

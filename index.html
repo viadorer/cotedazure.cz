@@ -59,12 +59,35 @@
 
         .header-content {
             padding-left: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-right: 30px;
         }
 
         .title {
             font-size: 24px;
             font-weight: bold;
             color: #000;
+        }
+        
+        .main-nav {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: #000;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            padding: 5px 10px;
+        }
+        
+        .nav-link:hover {
+            opacity: 0.7;
         }
 
         .content {
@@ -101,6 +124,8 @@
             .header-content {
                 padding-left: 20px;
                 padding-right: 20px;
+                flex-wrap: wrap;
+                gap: 10px;
             }
 
             .message {
@@ -117,6 +142,9 @@
     <header class="header">
         <div class="header-content">
             <div class="title">Côte d'Azur Immobilier</div>
+            <nav class="main-nav">
+                <a href="properties.html" class="nav-link">Propriétés</a>
+            </nav>
         </div>
     </header>
     <main class="content">
